@@ -4,8 +4,10 @@
 #include <sstream>
 #include <fstream>
 #include <math.h>
+#include <chrono>
 
 using namespace std;
+using namespace chrono;
 
 class Point {
 public:
@@ -305,6 +307,7 @@ int main() {
 
     ifstream file("input.txt");
     string line = "";
+    auto start = high_resolution_clock::now(); 
     vector<vector<pair<char, int>>> wires;
     vector<pair<char, int>> wire1;
     vector<pair<char, int>> wire2;
@@ -338,8 +341,11 @@ int main() {
     vector<int> inter_steps = get_intersection_steps(P1, P2);
     int min_distance = get_min_distance(intersections);
     int min_steps = get_min_steps(inter_steps);
+    auto stop = high_resolution_clock::now(); 
+    auto duration = duration_cast<milliseconds>(stop - start); 
     cout << "Minimum Distance: " << min_distance << endl;
     cout << "Minimum Steps: " << min_steps << endl;
+    cout << "Time: " << duration.count() << endl;
     cout << endl;
     return 0;
 }

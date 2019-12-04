@@ -21,8 +21,10 @@ public:
         : x(x), y(y) {}
     int distance_from(Point p) {return abs(p.x-x) + abs(p.y-y);}
 };
+
 enum Orientation {UP_DOWN,LEFT_RIGHT};
 enum Direction {UP,DOWN,LEFT,RIGHT};
+
 class Line {
 public:
     Point A;
@@ -56,7 +58,9 @@ public:
             else D = UP;
         }
     }
-    int get_length() { return (abs(B.x - A.x) + abs(B.y - A.y)); }
+    int get_length() { 
+        return (abs(B.x - A.x) + abs(B.y - A.y)); 
+    }
     Point get_significant() {
         if(O == UP_DOWN) {
             if(A.y > B.y) return A;

@@ -32,3 +32,4 @@
 *.app
 .vscode/settings.json
 day3/test.cpp
+haskell/day1/day_one.hi

@@ -7,19 +7,14 @@ import Data.Char
 -- Req 1: Has adjacent numbers
 -- Req 2: Is in the range
 -- Req 3: ...
+-- [236491..713787]
 
-main = do
-  part_one
-  part_two
-
-part_one = do
-  let l = [236491..713787]
+part_one l = do
   let ls = [x | x <- l, has_adjacent (show x), doesnt_decrease (show x)]
   let len = length ls
   print len
 
-part_two = do
-  let l = [236491..713787]
+part_two l = do
   let ls = [x | x <- l, p2_has_adjacent (show x), doesnt_decrease (show x)]
   let len = length ls
   print len

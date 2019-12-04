@@ -25,16 +25,14 @@ int get_min_steps(vector<int> steps) {
 
 vector<Point> get_intersections(vector<Line> v1, vector<Line> v2) {
     vector<Point> intersections;
-    for(int i = 0; i < v1.size(); i++) {
-        for(int j = 0; j < v2.size(); j++) {
-            if(v2[j].intersects(v1[i])) intersections.push_back(v2[j].get_intersection(v1[i]));
-            if(v1[i].intersects(v2[j])) intersections.push_back(v1[i].get_intersection(v2[j]));
-        }
-    }
+    for(int i = 0; i < v1.size(); i++) 
+        for(int j = 0; j < v2.size(); j++) 
+            if(v1[i].intersects(v2[j])) 
+                intersections.push_back(v1[i].get_intersection(v2[j])); 
     return intersections;
 }
 
-vector<int> get_intersection_steps(Path p, Path q) {
+vector<int> get_steps(Path p, Path q) { // Returns vector of steps to each intersection
     vector<int> step_vector;
     for(int i = 0; i < p.size(); i++) {
         for(int j = 0; j < q.size(); j++) {
@@ -104,36 +102,26 @@ int main() {
     vector<vector<pair<char, int>>> wires;
     vector<pair<char, int>> wire1, wire2;
     wires.push_back(wire1); wires.push_back(wire2);
-    int i = 0;
-    string line = "";
+    int i = 0; string line = "";
     while(getline(file, line)) {
-        int pos = 0;
-        char direction = ' ';
-        string distance = "";
+        int pos = 0; char direction = ' '; string distance = "";
         while(pos != line.size() + 1) {
             if(isalpha(line[pos])) direction = line[pos];
             else if(isdigit(line[pos])) distance += line[pos];
             else if(pos == line.size() || line[pos] == ',') {
                 wires[i].push_back(pair<char, int>(direction, to_int(distance)));
                 direction = ' '; distance = "";
-            }
-            pos++;
-        }
-        i++;
+            } pos++;
+        } i++;
     }
     vector<Line> wire1_lines = get_lines(wires[0]);
     vector<Line> wire2_lines = get_lines(wires[1]);
-    Path P1(wire1_lines);
-    Path P2(wire2_lines);
-    vector<Point> intersections = get_intersections(wire1_lines, wire2_lines);
-    vector<int> inter_steps = get_intersection_steps(P1, P2);
-    int min_distance = get_min_distance(intersections);
-    int min_steps = get_min_steps(inter_steps);
+    int min_distance = get_min_distance(get_intersections(wire1_lines, wire2_lines));
+    int min_steps = get_min_steps(get_steps(Path(wire1_lines), Path(wire2_lines)));
     auto stop = high_resolution_clock::now(); 
     auto duration = duration_cast<microseconds>(stop - start); 
     cout << "Minimum Distance: " << min_distance << endl;
     cout << "Minimum Steps: " << min_steps << endl;
-    cout << "Time: " << duration.count() << endl;
-    cout << endl;
+    cout << "Time: " << duration.count() << '\n' << endl;
     return 0;
 }

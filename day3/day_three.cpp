@@ -3,6 +3,8 @@
 using namespace std;
 using namespace chrono;
 
+/* I like my code like I like my food: spaghetti */
+
 int get_min_distance(vector<Point> points) {
     int min = abs(points[1].x - 0) + (points[1].y - 0);
     for(Point p : points) {
@@ -63,7 +65,8 @@ vector<int> get_intersection_steps(Path p, Path q) {
 }
 
 vector<Line> get_lines(vector<pair<char, int>> wire1) {
-    vector<Line> lines; int x, y, new_x, new_y = 0; Point p, q; Line  l;
+    vector<Line> lines; Line  l; Point p, q;
+    int x, y = 0; int new_x, new_y = 0;
     for(int i = 0; i < wire1.size(); i++) {
         switch(wire1[i].first) {
             case 'R':
@@ -91,9 +94,8 @@ vector<Line> get_lines(vector<pair<char, int>> wire1) {
 int to_int(string s) {
     int number;
     istringstream is(s);
-    if(is >> number) return number;
-    else cout << "Something went wrong" << endl;
-    exit(1);
+    is >> number;
+    return number;
 }
 
 int main() {
@@ -102,7 +104,8 @@ int main() {
     vector<vector<pair<char, int>>> wires;
     vector<pair<char, int>> wire1, wire2;
     wires.push_back(wire1); wires.push_back(wire2);
-    int i = 0; string line = "";
+    int i = 0;
+    string line = "";
     while(getline(file, line)) {
         int pos = 0;
         char direction = ' ';

@@ -8,15 +8,9 @@ using namespace std;
 
 vector<int> run(vector<int> mem) {
     for(int i = 0; i < mem.size(); i+=4) {
-        if(mem[i] == 1) {
-            mem[mem[i+3]] = mem[mem[i+1]] + mem[mem[i+2]];
-        } else if(mem[i] == 2) {
-            mem[mem[i+3]] = mem[mem[i+1]] * mem[mem[i+2]];
-        } else if(mem[i] == 99) {
-            return mem;
-        } else {
-            //do nothing
-        }
+        if     (mem[i] == 1)  mem[mem[i+3]] = mem[mem[i+1]] + mem[mem[i+2]];
+        else if(mem[i] == 2)  mem[mem[i+3]] = mem[mem[i+1]] * mem[mem[i+2]]; 
+        else if(mem[i] == 99) return mem;
     }
     return {0};
 }
@@ -27,9 +21,8 @@ int crack(vector<int> mem) {
             vector<int> temp_vec = mem;
             temp_vec[1] = i;
             temp_vec[2] = j;
-            if(run(temp_vec)[0] == 19690720) {
+            if(run(temp_vec)[0] == 19690720) 
                 return ((100 * i) + j);
-            }
         }
     }
 }

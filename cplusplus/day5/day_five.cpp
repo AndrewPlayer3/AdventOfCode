@@ -21,55 +21,54 @@ vector<int> run(vector<int> mem) {
             if(B == 0) b_param = mem[i+2];
             else b_param = i+2;
         }        
-        if(OP == 1)  {
-            mem[mem[i+3]] = mem[a_param] + mem[b_param];
-            i+=4;
-        } else if(OP == 2)  {
-            mem[mem[i+3]] = mem[a_param] * mem[b_param];
-            i+=4;
-        } else if(OP == 3)  {
-            int input;
-            cout << "Enter an int: ";
-            cin >> input;
-            mem[mem[i+1]] = input;
-            i+=2;
-        } else if(OP == 4 ) {
-            if(A == 0) cout << mem[mem[i+1]] << endl;  
-            else       cout << mem[    i+1 ] << endl;
-            i+=2;
-        } else if(OP == 5) {
-            if(mem[a_param] != 0) i = mem[b_param]; 
-            else i+=3;
-        } else if(OP == 6) {
-            if(mem[a_param] == 0) i = mem[b_param]; 
-            else i+=3;
-        } else if(OP == 7) {
-            if(mem[a_param] < mem[b_param]) mem[mem[i+3]] = 1; 
-            else mem[mem[i+3]] = 0;
-            i+=4;
-        } else if(OP == 8) {
-            if(mem[a_param] == mem[b_param]) mem[mem[i+3]] = 1; 
-            else mem[mem[i+3]] = 0;
-            i+=4;
-        } else if(OP == 99) {
-            return mem;
-        } else {
-            i++;
+        switch(OP) {
+            case 1:
+                mem[mem[i+3]] = mem[a_param] + mem[b_param];
+                i+=4;
+                break;
+            case 2:
+                mem[mem[i+3]] = mem[a_param] * mem[b_param];
+                i+=4;
+                break;
+            case 3:
+                int input;
+                cout << "Enter an int: ";
+                cin >> input;
+                mem[mem[i+1]] = input;
+                i+=2;
+                break;
+            case 4:
+                if(A == 0) cout << mem[mem[i+1]] << endl;  
+                else       cout << mem[    i+1 ] << endl;
+                i+=2;
+                break;
+            case 5:
+                if(mem[a_param] != 0) i = mem[b_param]; 
+                else i+=3;
+                break;
+            case 6:
+                if(mem[a_param] == 0) i = mem[b_param]; 
+                else i+=3;
+                break;
+            case 7:
+                if(mem[a_param] < mem[b_param]) mem[mem[i+3]] = 1; 
+                else mem[mem[i+3]] = 0;
+                i+=4;
+                break;
+            case 8:
+                if(mem[a_param] == mem[b_param]) mem[mem[i+3]] = 1; 
+                else mem[mem[i+3]] = 0;
+                i+=4;
+                break;
+            case 99:
+                return mem;
+                break;
+            default:
+                i++;
+                break;
         }
     }
     return {0};
-}
-
-int crack(vector<int> mem) {
-    for(int i = 0; i < 99; i++) {
-        for(int j = 0; j < 99; j++) {
-            vector<int> temp_vec = mem;
-            temp_vec[1] = i;
-            temp_vec[2] = j;
-            if(run(temp_vec)[0] == 19690720) 
-                return ((100 * i) + j);
-        }
-    }
 }
 
 int to_int(string s) {
@@ -99,12 +98,6 @@ int main() {
             ++pos;
         }
     }
-    cout << "[";
-    for(int i = 0; i < mem.size(); i++) {
-        cout << mem[i];
-        if(i != mem.size() - 1) cout << ", ";
-    }
-    cout << "]" << endl;
     vector<int> done = run(mem);
     return 0;
 }

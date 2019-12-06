@@ -24,7 +24,7 @@ int main() {
         orbits[child].parent = &orbits[parent];
     }
     int count = 0;
-    for(pair<string, Planet> planet : orbits ) {
+    for(pair<string, Planet> planet : orbits) {
         Planet* p = planet.second.parent;
         while(p != nullptr) {
             p = p->parent;
@@ -40,19 +40,15 @@ int main() {
     int san_count = 0;
     for(int i = 0; i < count; i++) {
         for(int j = 0; j < count; j++) {
-            if(san_traveler == nullptr) {
-                break;
-            }
+            if(san_traveler == nullptr) break;
             if(san_traveler == you_traveler) {
-                san_count = j;
+                san_count = j; 
                 you_count = i;
                 break;
             }
             san_traveler = san_traveler->parent;
         }
-        if(san_traveler == you_traveler) {
-            break;
-        }
+        if(san_traveler == you_traveler) break;
         san_traveler = SAN->parent;
         you_traveler = you_traveler->parent;
     }

@@ -19,5 +19,16 @@ run l i
     | (l !! i) == 2 = run (changeValAt (l !! (i+3)) ((l !! (l !! (i+1))) * (l !! (l !! (i+2)))) l) (i+4)
     | otherwise = run l (i+1) 
 
+    
+check_one l = [x | x <- [0..99], (run (changeValAt 2 x l) 0) !! 0 == 19690720]
+check_two l = filter (\x -> check_one (changeValAt 1 x l) /= []) [0..99]
+
+
 part_one = do
     run codes 0
+
+part_two = do
+    let i = (check_two codes) !! 0
+    let c = changeValAt 1 i codes
+    let j = (check_one c) !! 0
+    (i * 100) + j

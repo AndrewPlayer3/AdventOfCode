@@ -21,9 +21,8 @@ int sum(std::vector<int> data) {
     return total;
 }
  
-int main() {
-
-    std::ifstream file("input.txt");
+int main(int argc, char *argv[]) {
+    std::ifstream file(argv[1]);
     std::string line = "";
     std::vector<int> data;
     while(std::getline(file, line)) {

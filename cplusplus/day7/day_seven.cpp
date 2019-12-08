@@ -109,43 +109,28 @@ int main() {
     vector<int> final_values = {0};
     int A_value = 0;
     vector<Amp> amps = {{mem}, {mem}, {mem}, {mem}, {mem}};
-    // Im disgusted with myself for this. 🤢🤮🤢🤮
-    for(int i = 5; i < 10; i++) {
-        for(int j = 5; j < 10; j++) {
-            if(j != i) {
-                for(int k = 5; k < 10; k++) {
-                    if(k != j && k != i) { 
-                        for(int l = 5; l < 10; l++) {
-                            if(l != k && l != j && l != i) {
-                                for(int m = 5; m < 10; m++) {
-                                    if(m != l && m != k && m != j && m != i) {
-                                        A_value = 0;
-                                        for(int i = 0; i < amps.size(); i++) amps[i] = Amp(mem);
-                                        amps[0].inputs = {i};
-                                        amps[1].inputs = {j};
-                                        amps[2].inputs = {k};
-                                        amps[3].inputs = {l};
-                                        amps[4].inputs = {m};
-                                        while(!amps[4].is_halted) {
-                                            int n = 0;
-                                            amps[n].inputs.push_back(A_value);
-                                            amps[++n].inputs.push_back(amps[n-1].run());
-                                            amps[++n].inputs.push_back(amps[n-1].run());
-                                            amps[++n].inputs.push_back(amps[n-1].run());
-                                            amps[++n].inputs.push_back(amps[n-1].run());
-                                            A_value = amps[n].run();
-                                            final_values.push_back(A_value);
-                                        }
-                                        amps[4].is_halted = false;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
+    int params[] = {5, 6, 7, 8, 9};
+    while(next_permutation(params, params+5)) {
+        A_value = 0;
+        for(int i = 0; i < amps.size(); i++) amps[i] = Amp(mem);
+        amps[0].inputs = {params[0]};
+        amps[1].inputs = {params[1]};
+        amps[2].inputs = {params[2]};
+        amps[3].inputs = {params[3]};
+        amps[4].inputs = {params[4]};
+        while(!amps[4].is_halted) {
+            int n = 0;
+            amps[n].inputs.push_back(A_value);
+            amps[++n].inputs.push_back(amps[n-1].run());
+            amps[++n].inputs.push_back(amps[n-1].run());
+            amps[++n].inputs.push_back(amps[n-1].run());
+            amps[++n].inputs.push_back(amps[n-1].run());
+            A_value = amps[n].run();
+            final_values.push_back(A_value);
         }
-    }                              
+        amps[4].is_halted = false;
+    }
+                                                            
     std::sort(final_values.begin(), final_values.end());
     std::cout << std::endl;
     std::cout << "Max thruster value: " << final_values[final_values.size() - 1] << std::endl;

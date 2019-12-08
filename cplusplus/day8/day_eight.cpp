@@ -10,46 +10,36 @@ using namespace std;
 
 int count_elem(vector<int> layer, int elem) {
     int count = 0;
-    for(int i : layer) {
-        if(i == elem) {
-            count++;
-        }
-    }
+    for(int i : layer) if(i == elem) count++;
     return count;
 }
 
 int to_int(char c) {
-    string s = "";
-    int number;
-    s += c;
+    string s = ""; s += c;
     istringstream is(s);
-    if(is >> number) return number;
+    int number;
+    is >> number; return number;
 }
 
 int main() {
     ifstream file("input.txt");
     string line = "";
     vector<vector<int>> layer_vector;
+    pair<int, int> check = {150, 150};
     while(getline(file, line)) {
         int count = 0;
         vector<int> layer(25*6);
         for(char c : line) {
-            if(count < (25*6)) {
-                layer[count] = to_int(c);
-                count++;
-            } 
+            if(count < (25*6)) { layer[count] = to_int(c); count++; } 
             if(count >= (25*6)) {
                 layer_vector.push_back(layer);
+                int zeros = count_elem(layer, 0);
+                if(zeros < check.first) {
+                    check.first = zeros;
+                    check.second = count_elem(layer, 1) * count_elem(layer, 2);
+                }
                 count = 0;
             }
-        }
-    }
-    pair<int, int> check = {150, 150};
-    for(vector<int> layer : layer_vector) {
-        int zeros = count_elem(layer, 0);
-        if(zeros < check.first) {
-            check.first = zeros;
-            check.second = count_elem(layer, 1) * count_elem(layer, 2);
         }
     }
     std::cout << "Count: " << check.second << endl;

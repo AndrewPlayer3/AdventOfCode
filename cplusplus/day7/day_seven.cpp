@@ -15,8 +15,8 @@ public:
     vector<int> inputs;
     int inp_count;
     int pc;
-    Amp(vector<int> memory, string name)
-        : name(name), mem(memory), is_halted(false), inputs({}), pc(0), inp_count(0) {}
+    Amp(vector<int> memory)
+        : name(""), mem(memory), is_halted(false), inputs({}), pc(0), inp_count(0) {}
     int run();
 };
 
@@ -107,9 +107,8 @@ int main() {
         }
     }
     vector<int> final_values = {0};
-    int pos = 0;
     int A_value = 0;
-    int Final = 0;
+    vector<Amp> amps = {{mem}, {mem}, {mem}, {mem}, {mem}};
     // Im disgusted with myself for this. 🤢🤮🤢🤮
     for(int i = 5; i < 10; i++) {
         for(int j = 5; j < 10; j++) {
@@ -121,30 +120,23 @@ int main() {
                                 for(int m = 5; m < 10; m++) {
                                     if(m != l && m != k && m != j && m != i) {
                                         A_value = 0;
-                                        Amp A(mem, string("A")); 
-                                        Amp B(mem, string("B"));
-                                        Amp C(mem, string("C")); 
-                                        Amp D(mem, string("D"));
-                                        Amp E(mem, string("E"));
-                                        A.inputs = {i};
-                                        B.inputs = {j};
-                                        C.inputs = {k};
-                                        D.inputs = {l};
-                                        E.inputs = {m};
-                                        while(!E.is_halted) {
-                                            int combo = ((((((((i * 10)+j)*10)+k)*10)+l)*10)+m);
-                                            A.inputs.push_back(A_value);
-                                            int B_value = A.run();
-                                            B.inputs.push_back(B_value);
-                                            int C_value = B.run();
-                                            C.inputs.push_back(C_value);
-                                            int D_value = C.run();
-                                            D.inputs.push_back(D_value);
-                                            int E_value = D.run();
-                                            E.inputs.push_back(E_value);
-                                            A_value = E.run();
+                                        for(int i = 0; i < amps.size(); i++) amps[i] = Amp(mem);
+                                        amps[0].inputs = {i};
+                                        amps[1].inputs = {j};
+                                        amps[2].inputs = {k};
+                                        amps[3].inputs = {l};
+                                        amps[4].inputs = {m};
+                                        while(!amps[4].is_halted) {
+                                            int n = 0;
+                                            amps[n].inputs.push_back(A_value);
+                                            amps[++n].inputs.push_back(amps[n-1].run());
+                                            amps[++n].inputs.push_back(amps[n-1].run());
+                                            amps[++n].inputs.push_back(amps[n-1].run());
+                                            amps[++n].inputs.push_back(amps[n-1].run());
+                                            A_value = amps[n].run();
                                             final_values.push_back(A_value);
                                         }
+                                        amps[4].is_halted = false;
                                     }
                                 }
                             }
@@ -154,8 +146,9 @@ int main() {
             }
         }
     }                              
-    sort(final_values.begin(), final_values.end());
-    std::cout << final_values[final_values.size() - 1] << std::endl;
+    std::sort(final_values.begin(), final_values.end());
+    std::cout << std::endl;
+    std::cout << "Max thruster value: " << final_values[final_values.size() - 1] << std::endl;
     std::cout << std::endl;
     return 0;
 } 

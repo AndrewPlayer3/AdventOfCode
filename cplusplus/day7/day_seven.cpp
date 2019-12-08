@@ -21,7 +21,7 @@ public:
 };
 
 int Amp::run() {
-    for(int i = 0, j = 0; i < mem.size();) {
+    for(int i = pc, j = inp_count; i < mem.size();) {
         int OP = (mem[i] % 100) / 1;
         int A  = ((mem[i] % 1000) - OP) / 100;
         int B  = ((mem[i] % 10000) - A)  / 1000;
@@ -43,9 +43,11 @@ int Amp::run() {
                 mem[mem[i+3]] = mem[a_param] * mem[b_param];
                 i+=4;  break;
             case 3:
-                mem[mem[i+1]] = inputs[j];
+                mem[mem[i+1]] = inputs[inp_count];
+                inp_count+=1;
                 j++; i+=2; break;
             case 4:
+                pc = i+2;
                 if(A == 0) {
                     return mem[mem[i+1]];
                 }  
@@ -104,39 +106,45 @@ int main() {
             ++pos;
         }
     }
-    Amp A(mem, string("A")); 
-    Amp B(mem, string("B"));
-    Amp C(mem, string("C")); 
-    Amp D(mem, string("D"));
-    Amp E(mem, string("E"));
     vector<int> final_values = {0};
     int pos = 0;
     int A_value = 0;
-    for(int i = 0; i < 5; i++) {
-        for(int j = 0; j < 5; j++) {
+    int Final = 0;
+    // Im disgusted with myself for this. 🤢🤮🤢🤮
+    for(int i = 5; i < 10; i++) {
+        for(int j = 5; j < 10; j++) {
             if(j != i) {
-                for(int k = 0; k < 5; k++) {
+                for(int k = 5; k < 10; k++) {
                     if(k != j && k != i) { 
-                        for(int l = 0; l < 5; l++) {
+                        for(int l = 5; l < 10; l++) {
                             if(l != k && l != j && l != i) {
-                                for(int m = 0; m < 5; m++) {
+                                for(int m = 5; m < 10; m++) {
                                     if(m != l && m != k && m != j && m != i) {
-                                        A.inputs = {i, A_value};
-                                        int B_value = A.run();
-                                        A.mem = mem;
-                                        B.inputs = {j, B_value};
-                                        int C_value = B.run();
-                                        B.mem = mem;
-                                        C.inputs = {k, C_value};
-                                        int D_value = C.run();
-                                        C.mem = mem;
-                                        D.inputs = {l, D_value};
-                                        int E_value = D.run();
-                                        D.mem = mem;
-                                        E.inputs = {m, E_value};
-                                        int Final = E.run();
-                                        E.mem = mem;
-                                        final_values.push_back(Final);
+                                        A_value = 0;
+                                        Amp A(mem, string("A")); 
+                                        Amp B(mem, string("B"));
+                                        Amp C(mem, string("C")); 
+                                        Amp D(mem, string("D"));
+                                        Amp E(mem, string("E"));
+                                        A.inputs = {i};
+                                        B.inputs = {j};
+                                        C.inputs = {k};
+                                        D.inputs = {l};
+                                        E.inputs = {m};
+                                        while(!E.is_halted) {
+                                            int combo = ((((((((i * 10)+j)*10)+k)*10)+l)*10)+m);
+                                            A.inputs.push_back(A_value);
+                                            int B_value = A.run();
+                                            B.inputs.push_back(B_value);
+                                            int C_value = B.run();
+                                            C.inputs.push_back(C_value);
+                                            int D_value = C.run();
+                                            D.inputs.push_back(D_value);
+                                            int E_value = D.run();
+                                            E.inputs.push_back(E_value);
+                                            A_value = E.run();
+                                            final_values.push_back(A_value);
+                                        }
                                     }
                                 }
                             }
@@ -145,19 +153,8 @@ int main() {
                 }
             }
         }
-    }
-
-    // cout << "[";
-    // for(int i : E.mem) {
-    //     cout << i << ", ";
-    // }
-    // cout << "]";
-
+    }                              
     sort(final_values.begin(), final_values.end());
-    for(int i : final_values) {
-        cout << i << ", ";
-    }
-    cout << endl;
     std::cout << final_values[final_values.size() - 1] << std::endl;
     std::cout << std::endl;
     return 0;
